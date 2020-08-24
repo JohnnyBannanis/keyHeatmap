@@ -1,12 +1,15 @@
 from pynput import keyboard
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib import cm
+
 import numpy as np
 
 key_pos = {
     'a': (150,220),
     'b': (420,280),
-    'c': (300,280),
+    'c': (300,50),
 }
 
 keys = {}
@@ -58,11 +61,11 @@ if __name__ == "__main__":
         y.append(key_pos[i][1])
         
     colors = np.random.rand(3)
-    area = (30 * np.random.rand(3))**2  # 0 to 15 point radii
+    area = (30 * np.random.rand(1))**2  # 0 to 15 point radii
     
     img = plt.imread("la_keyboard.png")
     fig, ax = plt.subplots()
     ax.imshow(img)
 
-    plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+    plt.scatter(x, y, s=area, c=cm.inferno(np.abs(y)), alpha=1)
     plt.show()
