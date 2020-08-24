@@ -1,40 +1,68 @@
 from pynput import keyboard
 
+import matplotlib.pyplot as plt
+import numpy as np
+
+key_pos = {
+    'a': (150,220),
+    'b': (420,280),
+    'c': (300,280),
+}
+
 keys = {}
 
 def on_press(key):
     try:
-        print('alphanumeric key {0} pressed'.format(
-            key.char))
         if(key.char in keys):
             keys[key.char] += 1
         else:
             keys[key.char] = 1
-        
     except AttributeError:
-        print('special key {0} pressed'.format(
-            key))
         if(key in keys):
             keys[key] += 1
         else:
             keys[key] = 1
 
 def on_release(key):
-    print('{0} released'.format(
-        key))
     if key == keyboard.Key.esc:
         # Stop listener
         print(keys)
         return False
 
-# Collect events until released
-with keyboard.Listener(
+
+if __name__ == "__main__":
+
+    with keyboard.Listener(
         on_press=on_press,
         on_release=on_release) as listener:
-    listener.join()
+            listener.join()
+            
+    listener = keyboard.Listener(
+        on_press=on_press,
+        on_release=on_release)
+    listener.start()
 
-# ...or, in a non-blocking fashion:
-listener = keyboard.Listener(
-    on_press=on_press,
-    on_release=on_release)
-listener.start()
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+    
+    
+    #N = 1
+    #x = np.random.rand(N)
+    #y = np.random.rand(N)
+    x = []
+    y = []
+
+    for i in key_pos:
+        x.append(key_pos[i][0])
+        y.append(key_pos[i][1])
+        
+    colors = np.random.rand(3)
+    area = (30 * np.random.rand(3))**2  # 0 to 15 point radii
+    
+    img = plt.imread("la_keyboard.png")
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+
+    plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+    plt.show()
