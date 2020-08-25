@@ -1,16 +1,10 @@
 from pynput import keyboard
-
+from plot import *
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib import cm
 
 import numpy as np
-
-key_pos = {
-    'a': (150,220),
-    'b': (420,280),
-    'c': (300,50),
-}
 
 keys = {}
 
@@ -21,10 +15,11 @@ def on_press(key):
         else:
             keys[key.char] = 1
     except AttributeError:
-        if(key in keys):
-            keys[key] += 1
+        aux = str(key).replace('Key.','')
+        if(aux in keys):
+            keys[aux] += 1
         else:
-            keys[key] = 1
+            keys[aux] = 1
 
 def on_release(key):
     if key == keyboard.Key.esc:
@@ -46,13 +41,6 @@ if __name__ == "__main__":
     listener.start()
 
 
-    # Fixing random state for reproducibility
-    np.random.seed(19680801)
-    
-    
-    #N = 1
-    #x = np.random.rand(N)
-    #y = np.random.rand(N)
     x = []
     y = []
 
