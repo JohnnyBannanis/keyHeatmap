@@ -28,6 +28,13 @@ def on_release(key):
         
         return False
 
+def to_grayscale(array):
+    local = max(array)
+    aux = []
+    for i in array:
+        aux.append( (0,0,0,i/local) )
+    return aux
+
 if __name__ == "__main__":
 
     with keyboard.Listener(
@@ -43,22 +50,34 @@ if __name__ == "__main__":
     x = []
     y = []
     v = []
+    pressed = []
 
     for i in key_pos:
         if i in keys:
             x.append(key_pos[i][0])
             y.append(key_pos[i][1])
             v.append(keys.get(i))
-            
-    
+            pressed.append(i)
+
+    bwv = to_grayscale(v)
     area = (50)**2  # 0 to 15 point radii
 
+    #heatmap?? kind of
     img = plt.imread("la_keyboard.png")
     fig, ax = plt.subplots()
     ax.imshow(img)
-
-    ##plt.scatter(x, y, s= area, c= cm.plasma(vf), alpha=0.6 )
-    plt.scatter(x, y, s= area, c= v, cmap='plasma', vmax=sum(v) ,alpha=0.5)
+    plt.scatter(x, y, s= area, c= v, cmap='plasma',vmax=sum(v) ,alpha=0.5)
     plt.colorbar()
+    plt.show()
+
+    #grayscale
+    img = plt.imread("la_keyboard.png")
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+    plt.scatter(x, y, s= area, c= bwv)
+    plt.show()
+
+    #bars
+    plt.bar(pressed, height=v)
     plt.show()
     #
