@@ -28,7 +28,7 @@ def on_release(key):
         
         return False
 
-def to_grayscale(array):
+def to_opacityscale(array):
     local = max(array)
     aux = []
     for i in array:
@@ -51,27 +51,48 @@ if __name__ == "__main__":
     y = []
     v = []
     pressed = []
+    a = []
 
     for i in key_pos:
         if i in keys:
-            x.append(key_pos[i][0])
-            y.append(key_pos[i][1])
+            x.append(key_pos[i][0][0])
+            y.append(key_pos[i][0][1])
+
             v.append(keys.get(i))
             pressed.append(i)
+            key_pos[i][1] = keys.get(i)
+    
+        a.append(key_pos.get(i)[1])
+    
+    heat = np.zeros((6,16))
+    start = 0
+    row = 0
+    for i in range(len(a)):
+        print(i)
+        print(start)
+        if (  (i+1) % 16 ) == 0:
+            print('entro')
+            heat[row] = a[start:i+1]
+            row += 1
+            start = i+1
 
-    bwv = to_grayscale(v)
+
+    bwv = to_opacityscale(v)
     area = (50)**2  # 0 to 15 point radii
 
-    #heatmap?? kind of
-    '''
-    img = plt.imread("la_keyboard.png")
-    fig, ax = plt.subplots()
-    ax.imshow(img)
 
-    plt.scatter(x, y, s= area, c= v, cmap='plasma',vmax=sum(v) ,alpha=0.5)
+    #heatmap
+    print(heat)
+
+    
+    extent = 0, 1000, 0, 400
+    img = plt.imread("la_keyboard_grid.png")
+    fig, ax = plt.subplots()
+    im1 = plt.imshow(img, extent=extent)
+    im2 = plt.imshow(heat, cmap='plasma', alpha = 0.8, interpolation='bilinear',extent=extent)
     plt.colorbar(shrink=0.7)
     plt.show()
-    '''
+
 
     #grayscale
     
@@ -100,19 +121,5 @@ if __name__ == "__main__":
     cb1.set_label('Some Units')
     fig.show()
     '''
-
-    heat = np.array([[2.8, 2.4, 2.5, 3.9, 0.0, 4.0, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 4.2],
-                    [2.4, 0.0, 4.0, 1.0, 2.7, 0.0, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
-                    [2.1, 2.4, 0.8, 4.3, 1.9, 4.4, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
-                    [2.6, 0.0, 0.3, 0.0, 3.1, 0.0, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
-                    [2.7, 1.7, 0.6, 2.6, 2.2, 6.2, 0.0, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2],
-                    [2.3, 1.2, 0.0, 0.0, 0.0, 3.2, 5.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 4.2]])
-
-    extent = 0, 1000, 0, 400
-    img = plt.imread("la_keyboard_grid.png")
-    fig, ax = plt.subplots()
-    im1 = plt.imshow(img, extent=extent)
-    im2 = plt.imshow(heat, cmap='plasma', alpha = 0.8, interpolation='bilinear',extent=extent)
-    plt.colorbar(shrink=0.7)
-    plt.show()
+    
     
