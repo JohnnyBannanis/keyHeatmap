@@ -1,3 +1,30 @@
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+from pynput import keyboard
+from matplotlib import cm
+
+
+def heatmap_plot(heat):
+    extent = 0, 1000, 0, 400
+    img = plt.imread("la_keyboard_grid.png")
+    fig, ax = plt.subplots()
+    im1 = plt.imshow(img, extent=extent)
+    im2 = plt.imshow(heat, cmap='plasma', alpha = 0.8, interpolation='nearest',extent=extent)
+    plt.colorbar(shrink=0.7)
+    plt.show()
+
+def opacity_plot(x,y,opacity):
+    img = plt.imread("la_keyboard.png")
+    fig, ax = plt.subplots()
+    ax.imshow(img)
+
+    sc = plt.scatter(x, y, c=opacity, s=3600)
+    plt.show()
+
+def bar_plot(pressed,values):
+    plt.bar(pressed, height=values)
+    plt.show()
+
 key_pos = {
     # key : [ position(x,y) , value,  ]
     #first row
