@@ -1,28 +1,37 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from pynput import keyboard
 from matplotlib import cm
 
 
-def heatmap_plot(heat):
+
+def heatmap_plot(heat,ax1):
     extent = 0, 1000, 0, 400
     img = plt.imread("la_keyboard_grid.png")
-    fig, ax = plt.subplots()
-    im1 = plt.imshow(img, extent=extent)
-    im2 = plt.imshow(heat, cmap='plasma', alpha = 0.8, interpolation='nearest',extent=extent)
-    plt.colorbar(shrink=0.7)
-    plt.show()
+    ax1.imshow(img, extent=extent)
+    ax1.imshow(heat, cmap='plasma', alpha = 0.8, interpolation='bilinear',extent=extent)
+    #img.colorbar(shrink=0.7)
 
-def opacity_plot(x,y,opacity):
+def opacity_plot(x,y,opacity,ax2):
     img = plt.imread("la_keyboard.png")
-    fig, ax = plt.subplots()
-    ax.imshow(img)
+    ax2.imshow(img)
+    ax2.scatter(x, y, c=opacity, s=900)
+   
 
-    sc = plt.scatter(x, y, c=opacity, s=3600)
-    plt.show()
+def bar_plot(pressed,values,ax3):
+    ax3.barh(pressed, width=values)
 
-def bar_plot(pressed,values):
-    plt.bar(pressed, height=values)
+def generate_figure(x,y,heat,values,pressed,opacity):
+    fig = plt.figure()
+    ax1 = plt.subplot(221)
+    ax2 = plt.subplot(223)
+    ax3 = plt.subplot(122)
+    #heatmap
+    heatmap_plot(heat,ax1)
+    #grayscale
+    opacity_plot(x,y,opacity,ax2)
+    #bars
+    bar_plot(pressed,values,ax3)
+    plt.tight_layout()
     plt.show()
 
 key_pos = {

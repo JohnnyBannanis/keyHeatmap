@@ -10,6 +10,7 @@ keys = {}
 def on_press(key):
     try:
         aux = key.char.lower()
+
         if(aux in keys):
             keys[aux] += 1
         else:
@@ -73,12 +74,7 @@ if __name__ == "__main__":
 
     opacity = to_opacityscale(values)
 
-    #heatmap
-    heatmap_plot(heat)
-    #grayscale
-    opacity_plot(x,y,opacity)
-    #bars
-    bar_plot(pressed,values)
+    generate_figure(x,y,heat,values,pressed,opacity)
 
     '''
     fig, ax = plt.subplots(figsize=(6, 1))
