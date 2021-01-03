@@ -6,7 +6,7 @@ from matplotlib import cm
 import numpy as np
 
 keys = {}
-
+#
 def on_press(key):
     try:
         aux = key.char.lower()
